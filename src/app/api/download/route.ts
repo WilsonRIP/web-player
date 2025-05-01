@@ -1,30 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 // import ytdl from "@distube/ytdl-core"; // Remove ytdl import
 import YtDlpWrap from "yt-dlp-wrap"; // Correct default import
-import path from "path"; // Needed for yt-dlp-wrap binary path
-import os from "os";
+// import path from "path"; // Needed for yt-dlp-wrap binary path
+// import os from "os";
 
 // Initialize YtDlpWrap
-const getytDlpPath = () => {
-  // Determine the correct path based on the OS
-  // Adjust these paths if your yt-dlp executable is located elsewhere
-  const platform = os.platform();
-  if (platform === "win32") {
-    // Example path for Windows, adjust as needed
-    return path.join(process.cwd(), "yt-dlp", "yt-dlp.exe"); // Ensure yt-dlp.exe is in a folder named yt-dlp in your project root
-  } else {
-    // Example path for Linux/macOS, adjust as needed
-    return path.join(process.cwd(), "yt-dlp", "yt-dlp"); // Ensure yt-dlp is in a folder named yt-dlp in your project root
-  }
-};
-
 let ytDlpWrapInstance: YtDlpWrap | null = null;
 
 try {
-  const ytDlpPath = getytDlpPath();
-  console.log(`Attempting to initialize YtDlpWrap with path: ${ytDlpPath}`);
-  ytDlpWrapInstance = new YtDlpWrap(ytDlpPath);
-  console.log("YtDlpWrap initialized successfully.");
+  // Initialize YtDlpWrap without a path.
+  // It will attempt to find yt-dlp in PATH or download it automatically.
+  // On Vercel, this should download to the writable /tmp directory.
+  console.log("Attempting to initialize YtDlpWrap with automatic download...");
+  ytDlpWrapInstance = new YtDlpWrap();
+  console.log("YtDlpWrap initialized successfully (potentially downloaded).");
 } catch (error) {
   console.error("Failed to initialize YtDlpWrap:", error);
 }
